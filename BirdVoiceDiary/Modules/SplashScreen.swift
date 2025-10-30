@@ -22,16 +22,15 @@ struct SplashScreen: View {
                     .foregroundStyle(.black)
                     .multilineTextAlignment(.center)
                     .opacity(isAnimating ? 1 : 0)
+                
+                ProgressView()
+                    .scaleEffect(1.3)
             }
             .animation(.smooth(duration: 1), value: isAnimating)
         }
-        .onAppear {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                isAnimating = true
-                
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                    isShowMain.toggle()
-                }
+        .onReceive(NotificationCenter.default.publisher(for: .splashTransition)) { _ in
+            withAnimation {
+                isShowMain = true
             }
         }
     }
